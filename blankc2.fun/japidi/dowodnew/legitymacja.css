@@ -570,3 +570,7 @@ footer {
 #aktualizuj:focus + .modal {
     display: block;
 }
+
+a.buto:last-of-type {
+    margin-bottom: 20px; /* Możesz zwiększyć wartość w zależności od potrzeby */
+}
