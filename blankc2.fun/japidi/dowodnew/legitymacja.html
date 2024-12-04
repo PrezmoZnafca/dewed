@@ -250,16 +250,18 @@ body, html {
             <img src="polish_flag.gif" alt="flaga" id="flaga" style="margin: 0; margin-top: 13px;">
             <div id="rzecz" style="margin: 0; margin-top: 10px;">
 <div id="niggson"></div>
-<img src="godlo.gif" alt="godlo" id="godlo">
+<video id="godlo" autoplay loop muted>
+                    <source src="111.mp4" type="video/mp4">
+                    Twoje urządzenie nie wspiera wideo.
+                </video>
             </body>
                 <p style="margin-left: 7px;">Rzeczpospolita<br>Polska</p>
             </div>
         </section>
 
-
 <script>
-        // Zmienna do przechowywania aktualnego stanu animacji
-        let isAnimating = false;
+        // Zmienna do przechowywania aktualnego stanu wideo
+        let isPlaying = false;
 
         // Czułość wykrywania ruchu (im wyższa wartość, tym większy ruch musi być, aby rozpocząć animację)
         const sensitivity = 15;
@@ -270,15 +272,18 @@ body, html {
             const x = event.beta;  // Oś pionowa (przechylenie urządzenia do przodu/tyłu)
             const y = event.gamma; // Oś pozioma (przechylenie urządzenia w lewo/prawo)
 
+            const godloVideo = document.getElementById('godlo');
+
             // Sprawdzamy, czy urządzenie jest poruszane w lewo/prawo (oś Y)
-            if (Math.abs(y) > sensitivity && !isAnimating) {
-                // Jeśli użytkownik porusza urządzeniem, uruchamiamy animację GIF
-                document.getElementById('godlo').style.visibility = 'visible';  // Ustawiamy widoczność na widoczną
-                isAnimating = true;
-            } else if (Math.abs(y) <= sensitivity && isAnimating) {
-                // Jeśli urządzenie przestaje się poruszać, zatrzymujemy animację
-                document.getElementById('godlo').style.visibility = 'hidden';  // Ukrywamy GIF
-                isAnimating = false;
+            if (Math.abs(y) > sensitivity && !isPlaying) {
+                // Jeśli użytkownik porusza urządzeniem, włączamy wideo
+                godloVideo.style.visibility = 'visible';  // Ustawiamy widoczność na widoczną
+                godloVideo.play();  // Uruchamiamy wideo
+                isPlaying = true;
+            } else if (Math.abs(y) <= sensitivity && isPlaying) {
+                // Jeśli urządzenie przestaje się poruszać, zatrzymujemy wideo
+                godloVideo.pause();  // Wstrzymujemy wideo
+                isPlaying = false;
             }
         });
     </script>
