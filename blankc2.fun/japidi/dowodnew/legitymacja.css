@@ -571,3 +571,22 @@ footer {
     display: block;
 }
 
+/* Stylowanie kontenera, aby działało pozycjonowanie */
+a.buto {
+    position: relative; /* Daje możliwość pozycjonowania elementów wewnątrz */
+}
+
+/* Stylowanie obrazka w lewym górnym rogu */
+.znizki-ikona {
+    position: absolute;
+    top: 10px; /* Odległość od góry */
+    left: -5px; /* Odległość od lewej krawędzi */
+    width: 3px; /* Zmień w zależności od rozmiaru obrazka */
+    height: 40px;
+}
+
+.spacer {
+    background-color: #F5F6FB; /* Kolor tła strony */
+    height: 50px; /* Wysokość odstępu (można dostosować) */
+    width: 100%;
+}
