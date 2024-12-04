@@ -260,43 +260,54 @@ body, html {
         </section>
 
 <script>
-        // Zmienna do przechowywania aktualnego stanu wideo
-        let isPlaying = false;
-        let lastX = 0, lastY = 0;  // Ostatnia pozycja X i Y, aby sprawdzić, czy urządzenie się porusza
+        // Pobieranie elementu wideo
+        const videoElement = document.getElementById("godlo");
 
-        // Funkcja, która nasłuchuje zmiany orientacji urządzenia
-        window.addEventListener('deviceorientation', function(event) {
-            const x = event.beta;  // Oś pionowa (przechylenie urządzenia do przodu/tyłu)
-            const y = event.gamma; // Oś pozioma (przechylenie urządzenia w lewo/prawo)
+        // Funkcja uruchamiająca video
+        const playVideo = () => {
+            videoElement.style.visibility = "visible";
+            videoElement.play();
+        };
 
-            const godloVideo = document.getElementById('godlo');
-            
-            // Sprawdzamy, czy urządzenie jest poruszane
-            const deltaX = Math.abs(x - lastX);
-            const deltaY = Math.abs(y - lastY);
-            
-            // Jeśli zmiana w ruchu jest zauważalna, animujemy wideo
-            if (deltaX > 1 || deltaY > 1) {
-                // Wideo zaczyna się animować tylko jeśli jeszcze nie jest uruchomione
-                if (!isPlaying) {
-                    godloVideo.style.visibility = 'visible'; // Ustawiamy widoczność na widoczną
-                    godloVideo.play(); // Uruchamiamy wideo
-                    isPlaying = true;
-                }
+        // Funkcja zatrzymująca video
+        const stopVideo = () => {
+            videoElement.pause();
+        };
 
-                // Ustawiamy pozycję wideo w zależności od ruchu urządzenia
-                godloVideo.style.transform = `translate(-50%, -50%) translate(${y * 2}px, ${x * 2}px)`; // Przemieszczamy wideo w zależności od ruchu
+        // Inicjalizacja zmiennych do detekcji zmian w żyroskopie
+        let lastAlpha = 0;
+        let lastBeta = 0;
+        let lastGamma = 0;
 
-                // Zapamiętujemy ostatnią pozycję
-                lastX = x;
-                lastY = y;
-            } else if (isPlaying) {
-                // Jeśli nie ma zauważalnego ruchu, zatrzymujemy wideo
-                godloVideo.pause(); // Wstrzymujemy wideo
-                isPlaying = false; // Zmieniamy stan na pauzę
-                godloVideo.style.visibility = 'hidden'; // Ukrywamy wideo
+        // Funkcja do detekcji zmiany w żyroskopie
+        const detectMovement = (event) => {
+            const { alpha, beta, gamma } = event;
+
+            // Sprawdzamy, czy zmieniły się wartości żyroskopu
+            if (
+                Math.abs(alpha - lastAlpha) > 5 || // zmiana w osi X (lewo/prawo)
+                Math.abs(beta - lastBeta) > 5 || // zmiana w osi Y (przód/tył)
+                Math.abs(gamma - lastGamma) > 5   // zmiana w osi Z (obrót)
+            ) {
+                // Jeśli tak, odtwarzamy wideo
+                playVideo();
+            } else {
+                // Jeśli nie, zatrzymujemy wideo
+                stopVideo();
             }
-        });
+
+            // Aktualizacja ostatnich wartości żyroskopu
+            lastAlpha = alpha;
+            lastBeta = beta;
+            lastGamma = gamma;
+        };
+
+        // Sprawdzamy dostępność żyroskopu
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener("deviceorientation", detectMovement, true);
+        } else {
+            alert("Twoje urządzenie nie obsługuje żyroskopu.");
+        }
     </script>
 	
 	
@@ -305,7 +316,7 @@ body, html {
         <section id="praw">
             <div class="cwel">
                 <span class="title">
-                    PRZEMYSŁAWv1
+                    PRZEMYSŁAWv2
                 </span>
                 <span class="description">
                     Imię (imiona)
