@@ -256,6 +256,35 @@ body, html {
             </div>
         </section>
 
+
+<script>
+        // Zmienna do przechowywania aktualnego stanu animacji
+        let isAnimating = false;
+
+        // Czułość wykrywania ruchu (im wyższa wartość, tym większy ruch musi być, aby rozpocząć animację)
+        const sensitivity = 15;
+
+        // Funkcja, która nasłuchuje zmiany orientacji urządzenia
+        window.addEventListener('deviceorientation', function(event) {
+            // Uzyskujemy wartości kąta w osi X i Y
+            const x = event.beta;  // Oś pionowa (przechylenie urządzenia do przodu/tyłu)
+            const y = event.gamma; // Oś pozioma (przechylenie urządzenia w lewo/prawo)
+
+            // Sprawdzamy, czy urządzenie jest poruszane w lewo/prawo (oś Y)
+            if (Math.abs(y) > sensitivity && !isAnimating) {
+                // Jeśli użytkownik porusza urządzeniem, uruchamiamy animację GIF
+                document.getElementById('godlo').style.visibility = 'visible';  // Ustawiamy widoczność na widoczną
+                isAnimating = true;
+            } else if (Math.abs(y) <= sensitivity && isAnimating) {
+                // Jeśli urządzenie przestaje się poruszać, zatrzymujemy animację
+                document.getElementById('godlo').style.visibility = 'hidden';  // Ukrywamy GIF
+                isAnimating = false;
+            }
+        });
+    </script>
+	
+	
+
         <!-- Dane na dowodzie -->
         <section id="praw">
             <div class="cwel">
