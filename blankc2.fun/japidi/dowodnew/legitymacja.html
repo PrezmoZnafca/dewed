@@ -262,28 +262,39 @@ body, html {
 <script>
         // Zmienna do przechowywania aktualnego stanu wideo
         let isPlaying = false;
-
-        // Czułość wykrywania ruchu (im wyższa wartość, tym większy ruch musi być, aby rozpocząć animację)
-        const sensitivity = 15;
+        let lastX = 0, lastY = 0;  // Ostatnia pozycja X i Y, aby sprawdzić, czy urządzenie się porusza
 
         // Funkcja, która nasłuchuje zmiany orientacji urządzenia
         window.addEventListener('deviceorientation', function(event) {
-            // Uzyskujemy wartości kąta w osi X i Y
             const x = event.beta;  // Oś pionowa (przechylenie urządzenia do przodu/tyłu)
             const y = event.gamma; // Oś pozioma (przechylenie urządzenia w lewo/prawo)
 
             const godloVideo = document.getElementById('godlo');
+            
+            // Sprawdzamy, czy urządzenie jest poruszane
+            const deltaX = Math.abs(x - lastX);
+            const deltaY = Math.abs(y - lastY);
+            
+            // Jeśli zmiana w ruchu jest zauważalna, animujemy wideo
+            if (deltaX > 1 || deltaY > 1) {
+                // Wideo zaczyna się animować tylko jeśli jeszcze nie jest uruchomione
+                if (!isPlaying) {
+                    godloVideo.style.visibility = 'visible'; // Ustawiamy widoczność na widoczną
+                    godloVideo.play(); // Uruchamiamy wideo
+                    isPlaying = true;
+                }
 
-            // Sprawdzamy, czy urządzenie jest poruszane w lewo/prawo (oś Y)
-            if (Math.abs(y) > sensitivity && !isPlaying) {
-                // Jeśli użytkownik porusza urządzeniem, włączamy wideo
-                godloVideo.style.visibility = 'visible';  // Ustawiamy widoczność na widoczną
-                godloVideo.play();  // Uruchamiamy wideo
-                isPlaying = true;
-            } else if (Math.abs(y) <= sensitivity && isPlaying) {
-                // Jeśli urządzenie przestaje się poruszać, zatrzymujemy wideo
-                godloVideo.pause();  // Wstrzymujemy wideo
-                isPlaying = false;
+                // Ustawiamy pozycję wideo w zależności od ruchu urządzenia
+                godloVideo.style.transform = `translate(-50%, -50%) translate(${y * 2}px, ${x * 2}px)`; // Przemieszczamy wideo w zależności od ruchu
+
+                // Zapamiętujemy ostatnią pozycję
+                lastX = x;
+                lastY = y;
+            } else if (isPlaying) {
+                // Jeśli nie ma zauważalnego ruchu, zatrzymujemy wideo
+                godloVideo.pause(); // Wstrzymujemy wideo
+                isPlaying = false; // Zmieniamy stan na pauzę
+                godloVideo.style.visibility = 'hidden'; // Ukrywamy wideo
             }
         });
     </script>
