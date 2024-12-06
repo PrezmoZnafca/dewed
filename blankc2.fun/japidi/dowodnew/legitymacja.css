@@ -56,18 +56,19 @@ main {
 
 #lew #flaga {
     width: 55%;
-    margin: 15;
+    margin-top: 25px;
 }
 
 #lew #godlo {
     width: 25%;
     z-index: 1; /* Wyświetl na wierzchu */
-	margin-top: 25px
+	margin-top: 18px
 }
 
 #lew p {
     font-size: 13px;
     color: #000000;
+	margin-top: 18px;
 }
 
 #rzecz {
